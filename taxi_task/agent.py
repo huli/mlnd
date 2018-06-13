@@ -13,7 +13,7 @@ class Agent:
         self.nA = nA
         self.Q = defaultdict(lambda: np.zeros(self.nA))
 
-    def get_e_greedy_probs(self, Q, state, nA, epsilon=0.005):
+    def get_e_greedy_probs(self, Q, state, nA, epsilon=0.001):
         """Generate Epsilon greedy probabilities for a state s."""
 
         probs = np.ones(nA) * epsilon / nA
@@ -22,7 +22,7 @@ class Agent:
 
         return probs
 
-    def select_action(self, state, epsilon=0.005):
+    def select_action(self, state):
         """ Given the state, select an action.
         Params
         ======
@@ -32,7 +32,7 @@ class Agent:
         - action: an integer, compatible with the task's action space
         """
         probs = self.get_e_greedy_probs(
-            self.Q, state, self.nA, 0.003)
+            self.Q, state, self.nA)
         return np.random.choice(self.nA, p=probs)
 
     def step(self, state, action, reward, next_state, done):
@@ -46,12 +46,16 @@ class Agent:
         - done: whether the episode is complete (True or False)
         """
 
-        alpha = 0.2
+        alpha = 0.1
         gamma = 1
 
         expected_probs = self.get_e_greedy_probs(
             self.Q, next_state, self.nA)
         expected_a_value = np.dot(expected_probs, self.Q[next_state])
-        self.Q[state][action] = (
-            1 - alpha) * self.Q[state][action] + alpha * (
-            reward + gamma * expected_a_value)
+
+        self.Q[state][action] = self.Q[state][action] \
+                                + alpha * (reward + ((gamma * expected_a_value) - self.Q[state][action]))
+        if done:
+            # Update TD estimate of Q
+            self.Q[state][action] = self.Q[state][action] \
+                                + alpha * (reward + ((gamma * 0) - self.Q[state][action]))
