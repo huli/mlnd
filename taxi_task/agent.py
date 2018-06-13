@@ -15,12 +15,10 @@ class Agent:
 
     def get_e_greedy_probs(self, Q, state, nA, epsilon=0.005):
         """Generate Epsilon greedy probabilities for a state s."""
-        if state in Q.keys():
-            probs = [epsilon / nA for i in range(nA)]
-            argmax = np.argmax(Q[state])
-            probs[argmax] += (1 - epsilon)
-        else:
-            probs = [1 / nA for i in range(nA)]
+
+        probs = np.ones(nA) * epsilon / nA
+        argmax = np.argmax(Q[state])
+        probs[argmax] = (1 - epsilon) + (epsilon / nA)
 
         return probs
 
@@ -34,7 +32,7 @@ class Agent:
         - action: an integer, compatible with the task's action space
         """
         probs = self.get_e_greedy_probs(
-            self.Q, state, self.nA)
+            self.Q, state, self.nA, 0.003)
         return np.random.choice(self.nA, p=probs)
 
     def step(self, state, action, reward, next_state, done):
@@ -48,7 +46,7 @@ class Agent:
         - done: whether the episode is complete (True or False)
         """
 
-        alpha = 0.1
+        alpha = 0.2
         gamma = 1
 
         expected_probs = self.get_e_greedy_probs(
