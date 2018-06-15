@@ -46,7 +46,7 @@ class Agent:
         - done: whether the episode is complete (True or False)
         """
 
-        alpha = 0.1
+        alpha = 0.2
         gamma = 1
 
         expected_probs = self.get_e_greedy_probs(
