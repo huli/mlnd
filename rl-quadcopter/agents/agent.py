@@ -11,6 +11,8 @@ class MavicAir_Agent():
         self.action_high = task.action_high
         self.action_range = self.action_high - self.action_low
 
+        self.huli_action = np.zeros((4,))
+
         self.w = np.random.normal(
             size=(self.state_size, self.action_size),  # weights for simple linear policy: state_space x action_space
             scale=(self.action_range / (2 * self.state_size))) # start producing actions in a decent range
@@ -41,7 +43,8 @@ class MavicAir_Agent():
     def act(self, state):
         # Choose action based on given state and policy
         action = np.dot(state, self.w)  # simple linear policy
-        return action
+        self.huli_action += [0, 0, 0.1, 0]
+        return self.huli_action
 
     def learn(self):
         # Learn by random policy search, using a reward-based score
