@@ -23,6 +23,7 @@ class Actor:
 
     def build_model(self):
         """Build an actor (policy) network that maps states -> actions."""
+
         # Define input layer (states)
         states = layers.Input(shape=(self.state_size,), name='states')
 
@@ -36,7 +37,8 @@ class Actor:
 
         # Add final output layer with sigmoid activation
         raw_actions = layers.Dense(units=self.action_size, activation='sigmoid',
-            name='raw_actions',kernel_initializer=layers.initializers.RandomUniform(minval=-0.003, maxval=0.003))(net)
+            name='raw_actions', 
+            kernel_initializer=layers.initializers.RandomUniform(minval=-0.003, maxval=0.003))(net)
 
         # Scale [0, 1] output for each action dimension to proper range
         actions = layers.Lambda(lambda x: (x * self.action_range) + self.action_low,

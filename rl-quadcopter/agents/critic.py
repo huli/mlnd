@@ -18,6 +18,7 @@ class Critic:
 
     def build_model(self):
         """Build a critic (value) network that maps (state, action) pairs -> Q-values."""
+
         # Define input layers
         states = layers.Input(shape=(self.state_size,), name='states')
         actions = layers.Input(shape=(self.action_size,), name='actions')
@@ -37,7 +38,8 @@ class Critic:
         net = layers.Activation('relu')(net)
 
         # Add final output layer to prduce action values (Q values)
-        Q_values = layers.Dense(units=1, name='q_values',kernel_initializer=layers.initializers.RandomUniform(minval=-0.003, maxval=0.003))(net)
+        Q_values = layers.Dense(units=1, name='q_values',
+            kernel_initializer=layers.initializers.RandomUniform(minval=-0.003, maxval=0.003))(net)
 
         # Create Keras model
         self.model = models.Model(inputs=[states, actions], outputs=Q_values)

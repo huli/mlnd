@@ -6,7 +6,7 @@ from agents.agent import DDPG
 from tasks.takeoff import Task
 
 
-num_episodes = 500
+num_episodes = 50
 target_pos = np.array([0., 0., 100.])
 task = Task(target_pos=target_pos)
 agent = DDPG(task) 
@@ -32,10 +32,11 @@ for i_episode in range(1, num_episodes+1):
         if done:
             print("\rEpisode = {:4d}, score = {:7.3f} (best = {:7.3f} , worst = {:7.3f})".format(
                i_episode, score, best_score, worst_score), end="")
-            reward_results['average'].append(score/number_of_rewards)
             break
+    reward_results['average'].append(score/number_of_rewards)
     reward_results['episode'].append(i_episode)
     reward_results['reward'].append(score)
+    print('Average score: %s' % (score/number_of_rewards))
 
 
 plt.plot(reward_results['episode'], reward_results['reward'], label='score/episode')
