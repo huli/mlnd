@@ -22,6 +22,7 @@ class Task():
         self.action_low = 0
         self.action_high = 900
         self.action_size = 4
+        self.reward_scale = 10
 
         # Goal
         if target_pos is None :
@@ -30,12 +31,7 @@ class Task():
 
     def get_reward(self):
         """Uses current pose of sim to return reward."""
-        #reward = np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()
-        #np.tanh(8 / abs(np.array([110.,0.,10.] - np.array([0.,0.,10.])).sum()+.01))
-
-        reward = np.tanh(8 / (abs(self.sim.pose[:3] - self.target_pos).sum()+.001))
-        #print('Position: %s, Reward: %s' %(self.sim.pose[:3], reward))
-        return reward
+        return np.tanh(self.reward_scale / (abs(self.sim.pose[:3] - self.target_pos).sum()+.01))
 
 
     def step(self, rotor_speeds):
