@@ -39,7 +39,7 @@ class Actor:
         net = layers.Activation("relu")(net)
         
          # Add final output layer with sigmoid activation
-        raw_actions = layers.Dense(units=self.action_size, activation='sigmoid',
+        raw_actions = layers.Dense(units=self.action_size, activation='tanh',
             name='raw_actions', 
             kernel_initializer=layers.initializers.RandomUniform(minval=-0.003, maxval=0.003))(net)
 
